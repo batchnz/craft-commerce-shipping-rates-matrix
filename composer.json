@@ -1,0 +1,43 @@
+{
+    "name": "batchnz/craft-commerce-shipping-rates-matrix",
+    "description": " Configure shipping rates between multiple regions using a table matrix.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "craft commerce shipping rates matrix"
+    ],
+    "support": {
+        "docs": "https://github.com/batchnz/craft-commerce-shipping-rates-matrix/blob/master/README.md",
+        "issues": "https://github.com/batchnz/craft-commerce-shipping-rates-matrix/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Josh Smith",
+            "homepage": "https://www.batch.nz"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "batchnz\\ccshippingratesmatrix\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Craft Commerce Shipping Rates Matrix",
+        "handle": "craft-commerce-shipping-rates-matrix",
+        "hasCpSettings": false,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/batchnz/craft-commerce-shipping-rates-matrix/craft-commerce-shipping-rates-matrix/master/CHANGELOG.md",
+        "components": {
+            "craftCommerceShippingRatesMatrixService": "batchnz\\ccshippingratesmatrix\\services\\CraftCommerceShippingRatesMatrixService"
+        },
+        "class": "batchnz\\ccshippingratesmatrix\\Plugin"
+    }
+}

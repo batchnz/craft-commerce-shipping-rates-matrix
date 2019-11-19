@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Commerce Shipping Rates Matrix plugin for Craft CMS 3.x
+ *
+ * CraftCommerceShippingRatesMatrixField Field Input
+ *
+ * @author    Josh Smith
+ * @copyright Copyright (c) 2019 Josh Smith
+ * @link      https://www.batch.nz
+ * @package   CraftCommerceShippingRatesMatrix
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.editableTableField({
+	id: name,
+	name: name,
+	cols: cols,
+	rows: rows
+	})
+}}
