@@ -14,7 +14,7 @@
 #}
 
 {% extends "_layouts/cp" %}
-{% import "craft-commerce-shipping-rates-matrix/_includes/forms" as forms %}
+{% import "_includes/forms" as forms %}
 
 {# {% do view.registerAssetBundle("batchnz\\ccshippingratesmatrix\\assetbundles\\craftcommerceshippingratesmatrix\\CraftCommerceShippingRatesMatrixAsset") %} #}
 {% do view.registerAssetBundle("batchnz\\ccshippingratesmatrix\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
@@ -31,17 +31,4 @@
 {# The content of the CP Section#}
 {% set content %}
     <h2>{{ "How to use"|t('craft-commerce-shipping-rates-matrix') }}</h2>
-    <p class="textline">Enter your shipping rates between regions into the table below. Regions are automatically pulled through from the defined Commerce regions.</p>
-
-    {{ forms.editableMatrixTableField({
-        label: "Shipping Rates"|t("craft-commerce-shipping-rates-matrix"),
-        instructions: ""|t("craft-commerce-shipping-rates-matrix"),
-        id: "shippingRates",
-        name: "shippingRates",
-        required: false,
-        matrix: [
-
-        ],
-        errors: {},
-    }) }}
 {% endset %}

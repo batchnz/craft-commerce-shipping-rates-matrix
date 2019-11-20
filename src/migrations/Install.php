@@ -108,11 +108,12 @@ class Install extends Migration
                 ShippingRate::tableName(),
                 [
                     'id' => $this->primaryKey()->unsigned(),
+                    'elementId' => $this->integer()->notNull(),
                     'fieldId' => $this->integer()->notNull(),
-                    'siteId' => $this->integer()->notNull(),
                     'fromStateId' => $this->integer()->notNull(),
                     'toStateId' => $this->integer()->notNull(),
-                    'rate' => $this->decimal('14,2')->notNull(),
+                    'rate' => $this->decimal('14,2'),
+                    'siteId' => $this->integer()->notNull(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
@@ -131,7 +132,7 @@ class Install extends Migration
     protected function createIndexes()
     {
         // craftcommerceshippingratesmatrix_shipping_rates table
-        $this->createIndex(null, ShippingRate::tableName(), ['fromStateId','toStateId','rate'], true);
+        $this->createIndex(null, ShippingRate::tableName(), ['elementId','fieldId','fromStateId','toStateId','rate','siteId'], true);
 
         // Additional commands depending on the db driver
         switch ($this->driver) {
@@ -164,6 +165,16 @@ class Install extends Migration
             ShippingRate::tableName(),
             'fieldId',
             CraftTable::FIELDS,
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(ShippingRate::tableName(), 'elementId'),
+            ShippingRate::tableName(),
+            'elementId',
+            CraftTable::ELEMENTS,
             'id',
             'CASCADE',
             'CASCADE'

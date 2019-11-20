@@ -336,43 +336,8 @@ class ShippingRates extends Field
         $jsonVars = Json::encode($jsonVars);
         Craft::$app->getView()->registerJs("$('#{$namespacedId}-field').CraftCommerceShippingRatesMatrixShippingRates(" . $jsonVars . ");");
 
-        // Fetch commerce states for building the table matrix
-        $commerce = CommercePlugin::getInstance();
-        $states = $commerce->getStates()->getAllStates();
-
-        $cols = [[
-            'heading' => '',
-            'type' => 'heading',
-            // 'headingHtml' => '',
-            'info' => 'These are the delivery states listed in the commerce settings.',
-            // 'placeholder' => ''
-        ]];
-        $rows = [];
-
-        foreach ($states as $state) {
-            $cols[$state->id] = [
-                'heading' => $state->name,
-                'type' => 'number',
-                // 'headingHtml' => '',
-                // 'info' => '',
-                // 'placeholder' => ''
-            ];
-        }
-
-        // Add the header row
-        foreach ($states as $rowState) {
-            foreach ($cols as $colkey => $col) {
-                $value = $rowState->name;
-                $row[$colkey] = [
-                    // 'heading' => $value,
-                    'value' => $colkey === 0 ? $value : '',
-                    // 'hasErrors' => false,
-                    // 'class' => '',
-                    // 'options' => []
-                ];
-            }
-            $rows[$rowState->id] = $row;
-        }
+        // Fetch the stored rates matrix from the database
+        list($rows, $cols) = Plugin::$instance->shippingrates->getRatesMatrix($element, $this);
 
         // Render the input template
         return Craft::$app->getView()->renderTemplate(
@@ -394,6 +359,7 @@ class ShippingRates extends Field
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
-        parent::afterElementSave();
+        Plugin::$instance->shippingrates->saveRates($element, $isNew);
+        return parent::afterElementSave($element, $isNew);
     }
 }

@@ -10,7 +10,7 @@
 
 namespace batchnz\ccshippingratesmatrix;
 
-use batchnz\ccshippingratesmatrix\services\CraftCommerceShippingRatesMatrixService;
+use batchnz\ccshippingratesmatrix\services\ShippingRates;
 use batchnz\ccshippingratesmatrix\fields\ShippingRates as ShippingRatesField;
 
 use Craft;
@@ -38,8 +38,6 @@ use yii\base\Event;
  * @author    Josh Smith
  * @package   CraftCommerceShippingRatesMatrix
  * @since     1.0.0
- *
- * @property  CraftCommerceShippingRatesMatrixService $craftCommerceShippingRatesMatrixService
  */
 class Plugin extends BasePlugin
 {
@@ -48,11 +46,11 @@ class Plugin extends BasePlugin
 
     /**
      * Static property that is an instance of this plugin class so that it can be accessed via
-     * CraftCommerceShippingRatesMatrix::$plugin
+     * CraftCommerceShippingRatesMatrix::$instance
      *
      * @var CraftCommerceShippingRatesMatrix
      */
-    public static $plugin;
+    public static $instance;
 
     // Public Properties
     // =========================================================================
@@ -68,8 +66,8 @@ class Plugin extends BasePlugin
     // =========================================================================
 
     /**
-     * Set our $plugin static property to this class so that it can be accessed via
-     * CraftCommerceShippingRatesMatrix::$plugin
+     * Set our $instance static property to this class so that it can be accessed via
+     * CraftCommerceShippingRatesMatrix::$instance
      *
      * Called after the plugin class is instantiated; do any one-time initialization
      * here such as hooks and events.
@@ -81,30 +79,12 @@ class Plugin extends BasePlugin
     public function init()
     {
         parent::init();
-        self::$plugin = $this;
+        self::$instance = $this;
 
         Craft::setAlias('@batchnz', __DIR__);
 
-        // Register our fields
-        Event::on(
-            Fields::class,
-            Fields::EVENT_REGISTER_FIELD_TYPES,
-            function (RegisterComponentTypesEvent $event) {
-                $event->types[] = ShippingRatesField::class;
-            }
-        );
-
-        // Do something after we're installed
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                    // We were just installed
-                }
-            }
-        );
-
+        $this->_registerComponents();
+        $this->_registerEvents();
 /**
  * Logging in Craft involves using one of the following methods:
  *
@@ -135,4 +115,42 @@ class Plugin extends BasePlugin
 
     // Protected Methods
     // =========================================================================
+
+    /**
+     * Registers Plugin Components
+     * @author Josh Smith <josh@batch.nz>
+     * @return void
+     */
+    protected function _registerComponents()
+    {
+        Craft::$app->setComponents(['shippingrates' => ShippingRates::class]);
+    }
+
+    /**
+     * Registers plugin events
+     * @author Josh Smith <josh@batch.nz>
+     * @return void
+     */
+    protected function _registerEvents()
+    {
+        // Register our fields
+        Event::on(
+            Fields::class,
+            Fields::EVENT_REGISTER_FIELD_TYPES,
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = ShippingRatesField::class;
+            }
+        );
+
+        // Do something after we're installed
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function (PluginEvent $event) {
+                if ($event->plugin === $this) {
+                    // We were just installed
+                }
+            }
+        );
+    }
 }

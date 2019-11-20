@@ -44,6 +44,13 @@ class ShippingRates extends Model
      *
      * @var int
      */
+    public $elementId;
+
+    /**
+     * Some model attribute
+     *
+     * @var int
+     */
     public $fieldId;
 
     /**
