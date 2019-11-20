@@ -103,20 +103,24 @@ class ShippingRates extends Model
     // =========================================================================
 
     /**
+     * Returns the rate
+     * @author Josh Smith <josh@batch.nz>
+     * @return float
+     */
+    public function getRate(): float
+    {
+        return (float) $this->rate;
+    }
+
+    /**
      * Returns the validation rules for attributes.
-     *
-     * Validation rules are used by [[validate()]] to check if attribute values are valid.
-     * Child classes may override this method to declare different validation rules.
-     *
-     * More info: http://www.yiiframework.com/doc-2.0/guide-input-validation.html
-     *
      * @return array
      */
     public function rules()
     {
         return [
-            [['fieldId', 'siteId', 'fromStateId', 'toStateId', 'rate'], 'required'],
-            [['fieldId', 'siteId', 'fromStateId', 'toStateId'], 'int'],
+            [['elementId', 'fieldId', 'siteId', 'fromStateId', 'toStateId', 'rate'], 'required'],
+            [['elementId', 'fieldId', 'siteId', 'fromStateId', 'toStateId'], 'int'],
             [['rate'], 'string'],
         ];
     }

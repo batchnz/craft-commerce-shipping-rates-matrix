@@ -18,8 +18,16 @@ use Craft;
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\Field;
+use craft\db\Table;
+use craft\commerce\db\Table as CommerceTable;
+use craft\elements\User;
 use craft\helpers\StringHelper;
 use craft\commerce\Plugin as CommercePlugin;
+use craft\commerce\elements\Variant;
+use craft\commerce\models\Address;
+use craft\commerce\models\Customer;
+
+use yii\db\Query;
 
 /**
  * Shipping Rates Service
@@ -50,6 +58,24 @@ class ShippingRates extends Component
             if( ! $field instanceof ShippingRatesField ) continue;
             $this->_saveRates($element, $field, $element->{$field->handle});
         }
+    }
+
+    /**
+     * Returns a shipping rate for the variant and user
+     * @author Josh Smith <josh@batch.nz>
+     * @param  Variant $variant
+     * @param  User    $user
+     * @return ShippingRatesModel
+     */
+    public function getDeliveryRate(Variant $variant, Address $vendorShippingAddress, Address $customerShippingAddress): ShippingRatesModel
+    {
+        $shippingRateRecord = $this->_getRatesQuery($vendorShippingAddress, $customerShippingAddress)
+            ->innerJoin(Table::RELATIONS.' r', 'r.targetId = '.ShippingRate::tableName().'.elementId')
+            ->innerJoin(CommerceTable::VARIANTS.' cv', 'cv.id = r.sourceId')
+            ->andWhere(['cv.id' => $variant->id])
+        ->one();
+
+        return new ShippingRatesModel($shippingRateRecord);
     }
 
     /**
@@ -100,6 +126,32 @@ class ShippingRates extends Component
     {
         $commerce = CommercePlugin::getInstance();
         return $commerce->getStates()->getAllStates();
+    }
+
+    /**
+     * Returns a generic query object for fetching rates data
+     * @author Josh Smith <josh@batch.nz>
+     * @param  Address $fromAddress
+     * @param  Address $toAddress
+     * @return Query
+     */
+    protected function _getRatesQuery(Address $fromAddress, Address $toAddress): Query
+    {
+        return ShippingRate::find()->where([
+            ShippingRate::tableName().'.fromStateId' => $this->_parseAddressValue($fromAddress),
+            ShippingRate::tableName().'.toStateId' => $this->_parseAddressValue($toAddress),
+        ]);
+    }
+
+    /**
+     * Returns the piece of information used to match rates to an address
+     * @author Josh Smith <josh@batch.nz>
+     * @param  Address $address
+     * @return mixed
+     */
+    protected function _parseAddressValue(Address $address)
+    {
+        return $address->getState()->id;
     }
 
     /**
