@@ -69,7 +69,7 @@ class ShippingRates extends Component
      */
     public function getDeliveryRate(Variant $variant, Address $vendorShippingAddress, Address $customerShippingAddress): ShippingRatesModel
     {
-        $shippingRateRecord = $this->_getRatesQuery($vendorShippingAddress, $customerShippingAddress)
+        $shippingRateRecord = $this->getRatesQuery($vendorShippingAddress, $customerShippingAddress)
             ->innerJoin(Table::RELATIONS.' r', 'r.targetId = '.ShippingRate::tableName().'.elementId')
             ->innerJoin(CommerceTable::VARIANTS.' cv', 'cv.id = r.sourceId')
             ->andWhere(['cv.id' => $variant->id])
@@ -104,7 +104,7 @@ class ShippingRates extends Component
         }
 
         // Generate a matrix from the shipping rates
-        $shippingRatesMatrix = $this->_createShippingRatesMatrix($shippingRates);
+        $shippingRatesMatrix = $this->createShippingRatesMatrix($shippingRates);
 
         // Fetch the shipping regions
         $shippingRegions = $this->getShippingRegions();
@@ -135,11 +135,11 @@ class ShippingRates extends Component
      * @param  Address $toAddress
      * @return Query
      */
-    protected function _getRatesQuery(Address $fromAddress, Address $toAddress): Query
+    protected function getRatesQuery(Address $fromAddress, Address $toAddress): Query
     {
         return ShippingRate::find()->where([
-            ShippingRate::tableName().'.fromStateId' => $this->_parseAddressValue($fromAddress),
-            ShippingRate::tableName().'.toStateId' => $this->_parseAddressValue($toAddress),
+            ShippingRate::tableName().'.fromStateId' => $this->parseAddressValue($fromAddress),
+            ShippingRate::tableName().'.toStateId' => $this->parseAddressValue($toAddress),
         ]);
     }
 
@@ -149,7 +149,7 @@ class ShippingRates extends Component
      * @param  Address $address
      * @return mixed
      */
-    protected function _parseAddressValue(Address $address)
+    protected function parseAddressValue(Address $address)
     {
         return $address->getState()->id;
     }
@@ -160,7 +160,7 @@ class ShippingRates extends Component
      * @param  array  $shippingRates
      * @return array
      */
-    protected function _createShippingRatesMatrix(array $shippingRates): array
+    protected function createShippingRatesMatrix(array $shippingRates): array
     {
         $matrix = [];
         foreach ($shippingRates as $shippingRate) {

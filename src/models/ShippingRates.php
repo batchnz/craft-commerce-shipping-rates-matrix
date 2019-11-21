@@ -15,6 +15,10 @@ use batchnz\ccshippingratesmatrix\Plugin;
 use Craft;
 use craft\base\Model;
 
+use Money\Money;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Currencies\ISOCurrencies;
+
 /**
  * CraftCommerceShippingRatesMatrixModel Model
  *
@@ -98,6 +102,17 @@ class ShippingRates extends Model
      */
     public $uid;
 
+    /**
+     * Stores plugin settings
+     * @var array
+     */
+    protected $pluginSettings;
+
+    public function init() {
+        parent::init();
+        $this->pluginSettings = Plugin::$instance->getSettings();
+    }
+
 
     // Public Methods
     // =========================================================================
@@ -109,7 +124,17 @@ class ShippingRates extends Model
      */
     public function getRate(): float
     {
-        return (float) $this->rate;
+        // Create a new money object in NZD
+        $rate = Money::NZD($this->rate * 100);
+        $modifier = $this->pluginSettings->percentageModifier;
+
+        // Define currencies and a formatter
+        $currencies = new ISOCurrencies();
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+
+        return $moneyFormatter->format(
+            $rate->multiply((1 + $modifier / 100), Money::ROUND_UP) // Always round up, to ensure shipping rates are covered.
+        );
     }
 
     /**

@@ -1,0 +1,32 @@
+{% set crumbs = [
+    { label: "Settings"|t('app'), url: url('settings') },
+    { label: "Plugins"|t('app'), url: url('settings/plugins') }
+] %}
+
+{% set selectedSubnavItem = 'settings' %}
+
+{% set fullPageForm = true %}
+
+{% extends "_layouts/cp" %}
+{% set title = plugin.name %}
+{% set docTitle = title ~ ' - ' ~ "Plugins"|t('app') %}
+
+{% import '_includes/forms' as forms %}
+
+{% block content %}
+    {{ actionInput(plugin.handle~'/shipping-rates/save-settings') }}
+    {{ hiddenInput('pluginHandle', plugin.handle) }}
+    {{ redirectInput(plugin.handle~'/settings') }}
+
+    <h2>Plugin Settings</h2>
+	<p>Use the fields below to update settings.</p><br>
+
+	{{ forms.textField({
+	    first: true,
+	    label: "Percentage Modifier",
+	    instructions: "Use this setting to apply a percentage modifier to shipping rates.",
+	    type: "number",
+	    name: 'percentageModifier',
+	    value: settings.percentageModifier
+	}) }}
+{% endblock %}
