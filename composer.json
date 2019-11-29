@@ -2,7 +2,7 @@
     "name": "batchnz/craft-commerce-shipping-rates-matrix",
     "description": " Configure shipping rates between multiple regions using a table matrix.",
     "type": "craft-plugin",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "keywords": [
         "craft",
         "cms",
