@@ -1,15 +1,15 @@
 {% set crumbs = [
-    { label: "Settings"|t('app'), url: url('settings') },
-    { label: "Plugins"|t('app'), url: url('settings/plugins') }
+    { label: 'Settings'|t('app'), url: url('settings') },
+    { label: 'Plugins'|t('app'), url: url('settings/plugins') }
 ] %}
 
 {% set selectedSubnavItem = 'settings' %}
 
 {% set fullPageForm = true %}
 
-{% extends "_layouts/cp" %}
-{% set title = plugin.name %}
-{% set docTitle = title ~ ' - ' ~ "Plugins"|t('app') %}
+{% extends '_layouts/cp' %}
+{% set title = 'Shipping Rates' %}
+{% set docTitle = title ~ ' - ' ~ 'Plugins'|t('app') %}
 
 {% import '_includes/forms' as forms %}
 
@@ -23,9 +23,9 @@
 
 	{{ forms.textField({
 	    first: true,
-	    label: "Percentage Modifier",
-	    instructions: "Use this setting to apply a percentage modifier to shipping rates.",
-	    type: "number",
+	    label: 'Percentage Modifier',
+	    instructions: 'Use this setting to apply a percentage modifier to shipping rates.',
+	    type: 'number',
 	    name: 'percentageModifier',
 	    value: settings.percentageModifier
 	}) }}
