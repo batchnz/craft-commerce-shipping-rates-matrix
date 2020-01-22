@@ -65,9 +65,4 @@ class ShippingRatesController extends Controller
 
         return $this->redirectToPostedUrl();
     }
-
-    public function actionRates()
-    {
-        echo '<pre> "here": '; print_r("here"); echo '</pre>'; die();
-    }
 }

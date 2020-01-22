@@ -83,7 +83,6 @@ class Plugin extends BasePlugin
         $item['label'] = 'Shipping';
         $item['url'] = $this->handle.'/settings';
         $item['subnav'] = [
-            'rates' => ['label' => 'Rates', 'url' => $this->handle.'/rates'],
             'settings' => ['label' => 'Settings', 'url' => $this->handle.'/settings'],
         ];
         return $item;
@@ -128,7 +127,6 @@ class Plugin extends BasePlugin
             function(RegisterUrlRulesEvent $event) {
                 $event->rules[$this->handle.'/settings'] = $this->handle.'/shipping-rates/settings';
                 $event->rules[$this->handle.'/save-settings'] = $this->handle.'/shipping-rates/save-settings';
-                $event->rules[$this->handle.'/rates'] = $this->handle.'/shipping-rates/rates';
             }
         );
 
