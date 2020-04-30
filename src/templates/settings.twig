@@ -19,14 +19,14 @@
     {{ redirectInput(plugin.handle~'/settings') }}
 
     <h2>Plugin Settings</h2>
-	<p>Use the fields below to update settings.</p><br>
+    <p>Use the fields below to update settings.</p><br>
 
-	{{ forms.textField({
-	    first: true,
-	    label: 'Percentage Modifier',
-	    instructions: 'Use this setting to apply a percentage modifier to shipping rates.',
-	    type: 'number',
-	    name: 'percentageModifier',
-	    value: settings.percentageModifier
-	}) }}
+    {{ forms.textField({
+        first: true,
+        label: 'Percentage Modifier',
+        instructions: 'Use this setting to apply a percentage modifier to shipping rates.',
+        type: 'number',
+        name: 'settings[percentageModifier]',
+        value: settings.percentageModifier
+    }) }}
 {% endblock %}
