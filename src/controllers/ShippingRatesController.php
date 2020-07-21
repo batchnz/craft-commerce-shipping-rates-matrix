@@ -29,6 +29,11 @@ class ShippingRatesController extends Controller
     // Public Methods
     // =========================================================================
 
+    public function actionIndex()
+    {
+        $this->redirect('craft-commerce-shipping-rates-matrix/settings');
+    }
+
     /**
      * Allows editing of plugin settings
      * @author Josh Smith <josh@batch.nz>
@@ -38,7 +43,8 @@ class ShippingRatesController extends Controller
     {
         $plugin = Plugin::$instance;
         $params = Craft::$app->getUrlManager()->getRouteParams();
-        $settings = SettingsRecord::find()->one();
+        $record = SettingsRecord::find()->one() ?? [];
+        $settings = new Settings($record);
         return $this->renderTemplate($plugin->handle.'/settings', array_merge($params, [
             'plugin' => $plugin,
             'actionUrl' => 'admin/'.$plugin->handle.'/save-settings',

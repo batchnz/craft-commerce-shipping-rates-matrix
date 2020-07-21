@@ -6,11 +6,16 @@ use craft\base\Model;
 
 class Settings extends Model
 {
-	/**
-	 * Defines a percentage modifier for the shipping rates
-	 * @var float
-	 */
-    public $fuelAdjustmentFactor;
+    public $id;
+    public $dateCreated;
+    public $dateUpdated;
+    public $uid;
+
+    /**
+     * Defines a percentage modifier for the shipping rates
+     * @var float
+     */
+    public $fuelAdjustmentFactor = 0.00;
 
     /**
      * Validation rules

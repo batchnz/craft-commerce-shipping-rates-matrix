@@ -125,6 +125,7 @@ class Plugin extends BasePlugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function(RegisterUrlRulesEvent $event) {
+                $event->rules[$this->handle] = $this->handle.'/shipping-rates';
                 $event->rules[$this->handle.'/settings'] = $this->handle.'/shipping-rates/settings';
                 $event->rules[$this->handle.'/save-settings'] = $this->handle.'/shipping-rates/save-settings';
             }

@@ -11,6 +11,8 @@
 namespace batchnz\ccshippingratesmatrix\models;
 
 use batchnz\ccshippingratesmatrix\Plugin;
+use batchnz\ccshippingratesmatrix\models\Settings;
+use batchnz\ccshippingratesmatrix\records\Settings as SettingsRecord;
 
 use Craft;
 use craft\base\Model;
@@ -110,7 +112,8 @@ class ShippingRates extends Model
 
     public function init() {
         parent::init();
-        $this->pluginSettings = Plugin::$instance->getSettings();
+        $record = SettingsRecord::find()->one() ?? [];
+        $this->pluginSettings = new Settings($record);
     }
 
 
@@ -126,7 +129,7 @@ class ShippingRates extends Model
     {
         // Create a new money object in NZD
         $rate = Money::NZD($this->rate * 100);
-        $modifier = $this->pluginSettings->percentageModifier;
+        $modifier = $this->pluginSettings->fuelAdjustmentFactor;
 
         // Define currencies and a formatter
         $currencies = new ISOCurrencies();
