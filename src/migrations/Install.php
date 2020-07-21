@@ -12,6 +12,7 @@ namespace batchnz\ccshippingratesmatrix\migrations;
 
 use batchnz\ccshippingratesmatrix\Plugin;
 use batchnz\ccshippingratesmatrix\records\ShippingRate;
+use batchnz\ccshippingratesmatrix\records\Settings;
 
 use Craft;
 use craft\config\DbConfig;
@@ -114,6 +115,21 @@ class Install extends Migration
                     'toStateId' => $this->integer()->notNull(),
                     'rate' => $this->decimal('14,2'),
                     'siteId' => $this->integer()->notNull(),
+                    'dateCreated' => $this->dateTime()->notNull(),
+                    'dateUpdated' => $this->dateTime()->notNull(),
+                    'uid' => $this->uid(),
+                ]
+            );
+        }
+
+        $tableSchema = Craft::$app->db->schema->getTableSchema(Settings::tableName());
+        if ($tableSchema === null) {
+            $tablesCreated = true;
+            $this->createTable(
+                Settings::tableName(),
+                [
+                    'id' => $this->primaryKey()->unsigned(),
+                    'fuelAdjustmentFactor' => $this->decimal('4,2')->defaultValue('0.00')->notNull(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),

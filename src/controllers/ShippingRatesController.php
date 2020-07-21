@@ -11,6 +11,8 @@
 namespace batchnz\ccshippingratesmatrix\controllers;
 
 use batchnz\ccshippingratesmatrix\Plugin;
+use batchnz\ccshippingratesmatrix\models\Settings;
+use batchnz\ccshippingratesmatrix\records\Settings as SettingsRecord;
 
 use Craft;
 use craft\web\Controller;
@@ -35,11 +37,13 @@ class ShippingRatesController extends Controller
     public function actionSettings()
     {
         $plugin = Plugin::$instance;
-        return $this->renderTemplate($plugin->handle.'/settings', [
+        $params = Craft::$app->getUrlManager()->getRouteParams();
+        $settings = SettingsRecord::find()->one();
+        return $this->renderTemplate($plugin->handle.'/settings', array_merge($params, [
             'plugin' => $plugin,
             'actionUrl' => 'admin/'.$plugin->handle.'/save-settings',
-            'settings' => $plugin->getSettings()
-        ]);
+            'settings' => $settings
+        ]));
     }
 
     /**
@@ -53,13 +57,21 @@ class ShippingRatesController extends Controller
         $this->requirePostRequest();
 
         $plugin = Plugin::$instance;
-        $settings = Craft::$app->getRequest()->getBodyParam('settings', []);
+        $data = Craft::$app->getRequest()->getBodyParam('settings', []);
 
-        if (!Craft::$app->getPlugins()->savePluginSettings($plugin, $settings)) {
+        $settings = new Settings($data);
+
+        if (!$settings->validate()) {
             Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t save plugin settings.'));
-            Craft::$app->getUrlManager()->setRouteParams(['plugin' => $plugin]);
+            Craft::$app->getUrlManager()->setRouteParams(['plugin' => $plugin, 'errors' => $settings->getErrors()]);
             return null;
         }
+
+        $settingsRecord = new SettingsRecord($settings);
+
+        // Truncate the table as there's only one record
+        Craft::$app->db->createCommand()->truncateTable(SettingsRecord::tableName())->execute();
+        $settingsRecord->save();
 
         Craft::$app->getSession()->setNotice(Craft::t('app', 'Plugin settings saved.'));
 

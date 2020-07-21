@@ -23,10 +23,11 @@
 
     {{ forms.textField({
         first: true,
-        label: 'Percentage Modifier',
-        instructions: 'Use this setting to apply a percentage modifier to shipping rates.',
+        label: 'Fuel Adjustment Factor',
+        instructions: 'Use this setting to apply a Fuel Adjustment Factor to shipping rates.',
         type: 'number',
-        name: 'settings[percentageModifier]',
-        value: settings.percentageModifier
+        name: 'settings[fuelAdjustmentFactor]',
+        value: settings.fuelAdjustmentFactor,
+        errors: (errors is defined ? errors['fuelAdjustmentFactor'] : null)
     }) }}
 {% endblock %}

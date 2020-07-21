@@ -10,7 +10,7 @@ class Settings extends Model
 	 * Defines a percentage modifier for the shipping rates
 	 * @var float
 	 */
-    public $percentageModifier;
+    public $fuelAdjustmentFactor;
 
     /**
      * Validation rules
@@ -20,7 +20,8 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['percentageModifier'], 'double']
+            [['fuelAdjustmentFactor'], 'double'],
+            [['fuelAdjustmentFactor'], 'required'],
         ];
     }
 }
